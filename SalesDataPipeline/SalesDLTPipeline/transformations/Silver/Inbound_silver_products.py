@@ -1,23 +1,22 @@
 import dlt
 
 @dlt.view(
-    name = "VW_Stg_Sales"
+    name = "VW_Stg_products"
 )
 
-def VW_Stg_Sales():
-    df = spark.readStream.table("Stg_Sales")
-    df = df.withColumn("total_amount", df.quantity * df.amount)
+def VW_Stg_products():
+    df = spark.readStream.table("Stg_products")
     return df
 
 dlt.create_streaming_table(
-    name = "Silver_Sales"
+    name = "Silver_Products"
 )
 
 dlt.create_auto_cdc_flow(
-    target = "Silver_Sales",
-    source = "VW_Stg_Sales",
-    keys = ["sales_id"],
-    sequence_by = "sale_timestamp",
+    target = "Silver_Products",
+    source = "VW_Stg_products",
+    keys = ["product_id"],
+    sequence_by = "last_updated",
     ignore_null_updates = False,
     apply_as_deletes = None,
     apply_as_truncates = None,
