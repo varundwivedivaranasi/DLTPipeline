@@ -2,8 +2,14 @@
 import dlt
 from pyspark.sql import DataFrame
 
+DQ_sales = {
+    "rule_1" : "sales_id IS NOT NULL"
+}
 #Empty streaming table
-dlt.create_streaming_table(name = "Stg_Sales")
+dlt.create_streaming_table(
+    name = "Stg_Sales",
+    expect_all_or_drop=DQ_sales
+    )
 
 # Define a flow to append East region sales data
 @dlt.append_flow(target="Stg_Sales")
